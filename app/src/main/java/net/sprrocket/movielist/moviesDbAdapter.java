@@ -88,6 +88,10 @@ public class moviesDbAdapter {
 
         return mDb.insert(SQLITE_TABLE, null, initialValues);
     }
+    //---deletes a particular title---
+    public void deleteMovie(String name){
+        mDb.execSQL("DELETE FROM " + SQLITE_TABLE + " WHERE " + KEY_TITLE + "= '" + name + "'");
+    }
 
     public boolean deleteAllMovies(){//might get used to 'delete all'
         int doneDelete = 0;
@@ -126,6 +130,7 @@ public class moviesDbAdapter {
         return mCursor;
     }
 
+    //A test function to make sure movies can be inserted into the database
     public void insertSomeMovies(){
         createMovie("Example Title", "Example Director", "9999", "F");
     }

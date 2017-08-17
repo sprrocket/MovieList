@@ -1,16 +1,22 @@
 package net.sprrocket.movielist;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import static android.R.id.list;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -27,7 +33,6 @@ public class MainMenu extends AppCompatActivity {
 
         dbHelper = new moviesDbAdapter(this);
         dbHelper.open();
-        dbHelper.insertSomeMovies();
         displayListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -63,10 +68,42 @@ public class MainMenu extends AppCompatActivity {
         dataAdapter = new SimpleCursorAdapter(this, R.layout.movie_info,
                 cursor, columns, to, 0);
 
-        ListView listView = (ListView) findViewById(R.id.listView1);
+        final ListView listView = (ListView) findViewById(R.id.listView1);
         //Assign adapter to ListView
         listView.setAdapter(dataAdapter);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
+
+                final String selected =((TextView)listView.getChildAt(pos).findViewById(R.id.movietitle)).getText().toString();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
+                builder.setCancelable(true);
+                builder.setTitle("Confirmation");
+                builder.setMessage("Delete this listing?");
+                builder.setPositiveButton("Confirm",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dbHelper.deleteMovie(selected);
+                                displayListView();
+                            }
+                        });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return false;
+            }
+        });
 
     }
+
 
 }

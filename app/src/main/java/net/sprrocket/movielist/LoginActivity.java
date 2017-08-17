@@ -87,10 +87,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //attemptLogin();
+                attemptLogin();
                 //Not ready for that yet
 
-                startActivity(new Intent(LoginActivity.this, MainMenu.class));
+                //startActivity(new Intent(LoginActivity.this, MainMenu.class));
 
             }
         });
@@ -338,6 +338,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                startActivity(new Intent(LoginActivity.this, MainMenu.class));
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

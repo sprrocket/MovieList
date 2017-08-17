@@ -40,8 +40,6 @@ public class addItem extends AppCompatActivity {
                 startActivity(new Intent(addItem.this, MainMenu.class));
             }
         });
-
-        //TODO: when the back button is pressed, go back to the main menu
     }
 
 

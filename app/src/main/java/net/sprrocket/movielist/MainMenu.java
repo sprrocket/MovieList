@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,11 +13,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import static android.R.id.list;
-
-public class MainMenu extends AppCompatActivity {
+public class mainMenu extends AppCompatActivity {
 
     private moviesDbAdapter dbHelper;
     private SimpleCursorAdapter dataAdapter;
@@ -35,11 +31,11 @@ public class MainMenu extends AppCompatActivity {
         dbHelper.open();
         displayListView();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton addMovieButton = (FloatingActionButton) findViewById(R.id.fab);
+        addMovieButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainMenu.this, addItem.class));
+                startActivity(new Intent(mainMenu.this, addItem.class));
             }
         });
     }
@@ -68,18 +64,18 @@ public class MainMenu extends AppCompatActivity {
         dataAdapter = new SimpleCursorAdapter(this, R.layout.movie_info,
                 cursor, columns, to, 0);
 
-        final ListView listView = (ListView) findViewById(R.id.listView1);
+        final ListView movieListView = (ListView) findViewById(R.id.listView1);
         //Assign adapter to ListView
-        listView.setAdapter(dataAdapter);
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        movieListView.setAdapter(dataAdapter);
+        movieListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-                // TODO Auto-generated method stub
+                //dialogue to remove a listing
 
-                final String selected =((TextView)listView.getChildAt(pos).findViewById(R.id.movietitle)).getText().toString();
+                final String selected =((TextView)movieListView.getChildAt(pos).findViewById(R.id.movietitle)).getText().toString();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(mainMenu.this);
                 builder.setCancelable(true);
                 builder.setTitle("Confirmation");
                 builder.setMessage("Delete this listing?");
@@ -87,8 +83,8 @@ public class MainMenu extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dbHelper.deleteMovie(selected);
-                                displayListView();
+                                dbHelper.deleteMovie(selected);//delete movie from database
+                                displayListView();//refresh list
                             }
                         });
                 builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -99,7 +95,7 @@ public class MainMenu extends AppCompatActivity {
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
-                return false;
+                return true;
             }
         });
 

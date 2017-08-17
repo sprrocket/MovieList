@@ -89,8 +89,8 @@ public class moviesDbAdapter {
         return mDb.insert(SQLITE_TABLE, null, initialValues);
     }
     //---deletes a particular title---
-    public void deleteMovie(String name){
-        mDb.execSQL("DELETE FROM " + SQLITE_TABLE + " WHERE " + KEY_TITLE + "= '" + name + "'");
+    public void deleteMovie(String title){
+        mDb.execSQL("DELETE FROM " + SQLITE_TABLE + " WHERE " + KEY_TITLE + "= '" + title + "'");
     }
 
     public boolean deleteAllMovies(){//might get used to 'delete all'
@@ -102,16 +102,16 @@ public class moviesDbAdapter {
 
     //TODO: write a function to delete a specific movie
 
-    public Cursor fetchMoviesByTitle(String inputText) throws SQLException{//TODO: Implement search with this func
-        Log.w(TAG, inputText);
+    public Cursor fetchMoviesByTitle(String title) throws SQLException{//TODO: Implement search with this func
+        Log.w(TAG, title);
         Cursor mCursor = null;
-        if(inputText==null || inputText.length() ==0){
+        if(title==null || title.length() ==0){
             mCursor = mDb.query(SQLITE_TABLE, new String[] {KEY_TITLE, KEY_DIRECTOR,
                     KEY_YEAR, KEY_RATING}, null, null, null, null, null);
         }
         else{
             mCursor=mDb.query(true, SQLITE_TABLE, new String[] {KEY_ROWID, KEY_TITLE, KEY_DIRECTOR, KEY_YEAR,
-            KEY_RATING}, KEY_TITLE + "like '%" + inputText + "%'", null, null, null, null, null);
+            KEY_RATING}, KEY_TITLE + "like '%" + title + "%'", null, null, null, null, null);
         }
         if (mCursor!=null){
             mCursor.moveToFirst();
